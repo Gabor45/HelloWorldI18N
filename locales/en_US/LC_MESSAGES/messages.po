@@ -1,0 +1,11 @@
+msgid "language"
+msgstr "en"
+
+msgid "title"
+msgstr "Welcome"
+
+msgid "Hello Világ"
+msgstr "Hello World!"
+
+
+
