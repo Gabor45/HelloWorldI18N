@@ -1,7 +1,8 @@
 # Setup
 
 ```bash
-[sudo] pip install -r requirements.txt
+[sudo] pip install Babel
+[sudo] pip install jinja2
 ```
 
 ## Compile `po` files

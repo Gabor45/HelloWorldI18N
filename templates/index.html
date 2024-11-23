@@ -1,0 +1,36 @@
+{% block title %}
+    {{ student.full_name }} {{ gettext('adatai') }}
+{% endblock %}
+
+{% block description %}
+    {{ gettext('Ez a rész a hallgató adatait tartalmazza, amelyek ismertek a rendszer számára.') }}
+{% endblock %}
+
+{% block content %}
+    <p class="alert alert-info">
+        {{ gettext('<strong> A teljes név nem egyedi.') }}</strong> {{ gettext('A hallgató teljes neve') }} {{ student.full_name }}. {{ gettext('Sem a rendszer sem az
+        oktatók nem fogják a teljes nevet azonosítóként kezelni, mert lehetséges, hogy több hallgató is ugyanilyen nevű.') }}
+    </p>
+    <p class="alert alert-warning">
+        {{ gettext('<strong>Lehetséges ismeretlen adat.</strong> Az alábbi táblázatban nem szereplő adatok ismeretlenek a
+        rendszer számára. Ezeket a rendszer nem tudja felhasználni semmilyen célra, például a hallgatók azonosítására,
+        vagy a teljesítményük értékelésére. Az ismeretlen adatokat az oktatók sem veszik figyelembe.') }}
+    </p>
+    <p class="alert alert-danger">
+        {{ gettext('<strong>Hiányzó adatok.</strong> Ha tudod, hogy hiányzik valamelyik adat, kérlek jelezd az oktatónak. Az oktató
+        hozzá tudja adni a hiányzó adatokat a rendszerhez. Például, ha több e-mail címet használtál a házi feladatok
+        leadásához, az oktató hozzá tudja adni ezeket a rendszerhez, hogy a rendszer azonosítani tudjon ezek alapján.') }}
+    </p>
+    <table class="table">
+        <tr>
+            <th scope="col">{{ gettext('Azonosító') }}</th>
+            <th scope="col">{{ gettext('Érték') }}</th>
+        </tr>
+        {% for name, value in student.ids.items() %}
+            <tr>
+                <th scope="row">{{ name }}</th>
+                <td>{{ value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
