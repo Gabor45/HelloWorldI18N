@@ -1,17 +1,108 @@
-# Setup
+# Basic i18n Guide
 
+This guide provides an initial overview for internationalizing (i18n) a Python application. The goal of i18n is to enable the application to support multiple languages, making it accessible to users speaking different languages.
+
+## 1. Prerequisites
+
+To ensure everything works correctly, install the following:
 ```bash
 [sudo] pip install Babel
 [sudo] pip install jinja2
 ```
 
-## Compile `po` files
+---
 
-The `po` files (human readable) need to be compiled into machine readable `mo` files before gettext can use them
+## 2. Creating the `locales` Directory
 
+The directory structure for storing translations should follow this pattern:
+
+```
+locales/
+├── en_US/
+│   └── LC_MESSAGES/
+│       ├── messages.po
+│       └── messages.mo
+├── hu_HU/
+│   └── LC_MESSAGES/
+│       ├── messages.po
+│       └── messages.mo
+```
+
+- **`locales`**: The main folder for storing translation files.
+- **`en_US`**: Folder for English translations.
+- **`LC_MESSAGES`**: Subfolder containing `.po` (text) and `.mo` (binary) translation files.
+
+---
+
+## 3. Using `.po` Files for Translation
+
+In a `.po` file, specify how the gettext function should translate each string:
+```po
+msgid "Hiányzó adatok."
+msgstr "Missing data."
+```
+
+---
+
+## 4. Converting `.po` Files to `.mo` Files
+
+To make these translations work, the `.po` files must be converted into `.mo` files.
+
+For this, use the Pybabel `compile` method.
+
+Run the following command in the terminal, ensuring Babel is installed:
 ```bash
 pybabel compile --domain=messages --directory=locales --use-fuzzy
 ```
+
+- `--domain=messages`: Specifies the name of the `.po` file.
+- `--directory=locales`: Specifies the path to the main directory.
+- `--use-fuzzy`: Includes fuzzy translations.
+
+---
+
+## 5. Jinja2 és Python fileokhoz gettext hozzáadása
+
+### 5.1 Jinja2
+
+```
+Ez a szekció mutatja a csapatokat, amelyeknek {{ student.full_name }} tagja.
+```
+
+```
+{{ gettext('Ez a szekció mutatja a csapatokat, amelyeknek %(student.full_name)s tagja.')
+% { 'student.full_name' : student.full_name }
+```
+
+### 5.2 Python
+
+```
+description=f"{source_name} elem kapcsolódik {target_name} elemhez."
+```
+
+```
+description=gettext("%(source_name)s elem kapcsolódik %(target_name)s elemhez.")
+% {'source_name':source_name, 'target_name':target_name}
+```
+Ilyet még lehet, de viszont ha hozzáadunk így hozzá akkor a következő stringnél space-t kell nyomni, mert akkor egybe veszi a po-fileban pl: ```msgid "Elem kapcsolódik"```
+
+```
+description=gettext('Elem'+' kapcsolódik')
+```
+
+Ha pedig space nélkül adjuk meg : ```msgid "Elemkapcsolódik"```
+
+```
+description=gettext('Elem'+'kapcsolódik')
+```
+
+Ilyet pedig nem lehet mert nem ismeri fel a változó értékét: ``` msgid "Elemkapcsolódik" ```
+
+```
+string="ehhez a tárgyhoz"
+description=gettext('Elem'+'kapcsolódik'+string)
+```
+
 
 # Run
 
